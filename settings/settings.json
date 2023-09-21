@@ -1,16 +1,16 @@
 {
-    "notion_api_key": "secret_NjuoarYkEThn8EsyIgcPNzre7NLFbX63frbQv9vUaDx",
+    "notion_api_key": "secret_F3JFI5vE2q96bQE6T3c5helYiubXMtHFth430Zy0Vvb",
     "id": {
         "db": {
             "main": {
-                "test": "7d78e804bc11477b9bc17a5e0f23bf33",
+                "test": "6a29b5d6ebab4fe1b5beab29dae20270",
                 "prod": "f6ef577810dc47b0802bb9b378d46016"
             }
         }
     },
     "uuid": {
         "db" : {
-            "tag": {
+            "category": {
                 "falsh_dialog": "fa5a8846-e7ed-4106-8a2e-4313f3ab5a33",
                 "falsh_memo": "e41c311f-ed13-42de-b55a-c63a39e5695f",
                 "document_image": "82c855dc-d4ae-495a-88b5-84cdadf5f88d"

@@ -14,7 +14,7 @@ from tqdm import tqdm
 from common.common import Common as Com
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
-FOLDER_NAME = 'Documents'
+FOLDER_NAME = 'test'
 MAX_PAGE_SIZE = 1000
 
 
@@ -38,7 +38,7 @@ def main():
         # 設定ファイルの情報を抽出
         NOTION_API_KEY = settings['notion_api_key']  # アクセストークン
         ID_DB_MAIN = settings['id']['db']['main']['prod']  # 書き込み先DBのID
-        UUID_DB_DB_UUID_TAG = settings['uuid']['db']['tag']['document_image']  # 書き込むTAG(リレーション)
+        UUID_DB_DB_UUID_TAG = settings['uuid']['db']['category']['document_image']  # 書き込むTAG(リレーション)
 
         # Notionインスタンスの作成
         notion = Client(auth=NOTION_API_KEY)

@@ -63,7 +63,7 @@ class Common:
                             }
                         ]
                     },
-                    'Tag': {
+                    'Category': {
                         'relation': [
                             {
                                 'id': tag_id
@@ -110,7 +110,7 @@ class Common:
                             }
                         ]
                     },
-                    'Tag': {
+                    'Category': {
                         'relation': [
                             {
                                 'id': tag_id
@@ -127,9 +127,9 @@ class Common:
     @classmethod
     def add_block(cls, notion, page_id, content):
         """
-        同日の投稿にブロックを追加
+        同日の投稿にブロックを追加
         :param notion: Notionインスタンス
-        :param page_id: ブロックID
+        :param page_id: ブロックID
         """
         notion.blocks.children.append(
             **{
