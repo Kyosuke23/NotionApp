@@ -90,7 +90,7 @@ class Common:
         )
 
     @classmethod
-    def add_post_by_googledrive(cls, notion, db_id, post_title, tag_id, url):
+    def add_post_by_googledrive(cls, notion, db_id, post_title, relations, url):
         """
         新規投稿を作成
         :param notion: Notionインスタンス
@@ -111,11 +111,7 @@ class Common:
                         ]
                     },
                     'Category': {
-                        'relation': [
-                            {
-                                'id': tag_id
-                            }
-                        ]
+                        'relation': relations
                     },
                     'URL': {
                         'url': url
@@ -149,5 +145,23 @@ class Common:
                         }
                     },
                 ],
+            }
+        )
+
+    @classmethod
+    def update_relation_tag(cls, notion, page_id, categories):
+        """
+        同日の投稿にブロックを追加
+        :param notion: Notionインスタンス
+        :param page_id: ページID
+        """
+        notion.pages.update(
+            **{
+                'page_id': page_id,
+                'properties': {
+                    'Category': {
+                        'relation': categories
+                    }
+                }
             }
         )

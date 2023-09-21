@@ -11,9 +11,11 @@
     "uuid": {
         "db" : {
             "category": {
-                "falsh_dialog": "fa5a8846-e7ed-4106-8a2e-4313f3ab5a33",
-                "falsh_memo": "e41c311f-ed13-42de-b55a-c63a39e5695f",
-                "document_image": "82c855dc-d4ae-495a-88b5-84cdadf5f88d"
+                "dialog": "fa5a8846-e7ed-4106-8a2e-4313f3ab5a33",
+                "memo": "e41c311f-ed13-42de-b55a-c63a39e5695f",
+                "document_image": "82c855dc-d4ae-495a-88b5-84cdadf5f88d",
+                "document_spread_sheet": "88d49a43-d3c1-4365-95af-9751f924694f",
+                "google_drive": "55b2711d-c726-46b9-91da-6ab0cdf2a7bd"
             }
         }
     }

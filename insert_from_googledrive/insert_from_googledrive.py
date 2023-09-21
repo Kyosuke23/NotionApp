@@ -14,7 +14,7 @@ from tqdm import tqdm
 from common.common import Common as Com
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
-FOLDER_NAME = 'test'
+FOLDER_NAME = 'Documents'
 MAX_PAGE_SIZE = 1000
 
 
@@ -38,7 +38,9 @@ def main():
         # 設定ファイルの情報を抽出
         NOTION_API_KEY = settings['notion_api_key']  # アクセストークン
         ID_DB_MAIN = settings['id']['db']['main']['prod']  # 書き込み先DBのID
-        UUID_DB_DB_UUID_TAG = settings['uuid']['db']['category']['document_image']  # 書き込むTAG(リレーション)
+        UUID_DOCUMENT_IMAGE = settings['uuid']['db']['category']['document_image']  # 書き込むTAG(リレーション)
+        UUID_DOCUMENT_SPREAD_SHEET = settings['uuid']['db']['category']['document_spread_sheet']  # 書き込むTAG(リレーション)
+        UUID_DOCUMENT_GOOGLE_DRIVE = settings['uuid']['db']['category']['google_drive']  # 書き込むTAG(リレーション)
 
         # Notionインスタンスの作成
         notion = Client(auth=NOTION_API_KEY)
@@ -49,13 +51,20 @@ def main():
         # DBにリンクを投稿
         not_exits_list = []
         for file in tqdm(files):
+            # リレーション設定
+            relations = [{'id': UUID_DOCUMENT_GOOGLE_DRIVE}]
+            # 拡張子に応じて登録リレーションを変更
+            if file['name'].endswith('.xls'):
+                relations.append({'id': UUID_DOCUMENT_SPREAD_SHEET})
+            else:
+                relations.append({'id': UUID_DOCUMENT_IMAGE})
             # DB登録がないものだけ投稿
             if file['name'] not in title_list:
                 Com.add_post_by_googledrive(
                     notion=notion
                     , db_id=ID_DB_MAIN
                     , post_title=file['name']
-                    , tag_id=UUID_DB_DB_UUID_TAG
+                    , relations=relations
                     , url=file['webViewLink']
                 )
             else:
@@ -107,7 +116,7 @@ def get_file_list(service, folders):
             query += ' or '
         query += '"' + folder['id'] + '" in parents'
     query = '(' + query + ')'
-    query += ' and (name contains ".jpg" or name contains ".png" or name contains ".pdf")'
+    query += ' and (name contains ".jpg" or name contains ".png" or name contains ".pdf" or name contains ".xls")'
 
     results = service.files().list(
         pageSize=MAX_PAGE_SIZE
