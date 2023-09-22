@@ -38,8 +38,6 @@ def main():
         # 設定ファイルの情報を抽出
         NOTION_API_KEY = settings['notion_api_key']  # アクセストークン
         ID_DB_MAIN = settings['id']['db']['main']['prod']  # 書き込み先DBのID
-        UUID_DOCUMENT_IMAGE = settings['uuid']['db']['category']['document_image']  # 書き込むTAG(リレーション)
-        UUID_DOCUMENT_SPREAD_SHEET = settings['uuid']['db']['category']['document_spread_sheet']  # 書き込むTAG(リレーション)
         UUID_DOCUMENT_GOOGLE_DRIVE = settings['uuid']['db']['category']['google_drive']  # 書き込むTAG(リレーション)
 
         # Notionインスタンスの作成
@@ -53,11 +51,6 @@ def main():
         for file in tqdm(files):
             # リレーション設定
             relations = [{'id': UUID_DOCUMENT_GOOGLE_DRIVE}]
-            # 拡張子に応じて登録リレーションを変更
-            if file['name'].endswith('.xls'):
-                relations.append({'id': UUID_DOCUMENT_SPREAD_SHEET})
-            else:
-                relations.append({'id': UUID_DOCUMENT_IMAGE})
             # DB登録がないものだけ投稿
             if file['name'] not in title_list:
                 Com.add_post_by_googledrive(
@@ -143,13 +136,35 @@ def get_file_image(service, file):
 
 
 def get_title_list(notion, db_id):
-    list = Com.search_all_post(notion=notion, db_id=db_id)['results']
-    list = [rec.get('properties') for rec in list]
-    list = [rec.get('Name') for rec in list]
-    list = [rec.get('title') for rec in list]
-    list = [rec[0].get('text') for rec in list]
-    list = [rec.get('content') for rec in list]
-    return list
+    # 処理結果
+    result_list = []
+    # リクエストする内容
+    payload = {
+        'database_id': db_id,
+        'page_size': 100
+    }
+    # ループフラグ
+    has_more = True
+    # ページングしながら処理
+    while has_more:
+        # 1ページ単位で取得
+        results = Com.custom_search(notion=notion, payload=payload)
+        # タイトルリストを取得
+        list = results['results']
+        list = [rec.get('properties') for rec in list]
+        list = [rec.get('Name') for rec in list]
+        list = [rec.get('title') for rec in list]
+        list = [rec[0].get('text') for rec in list]
+        list = [rec.get('content') for rec in list]
+        # 返却結果に結合
+        result_list += list
+        # 次ページの存在判定
+        has_more = results['has_more']
+        # ページング設定
+        if has_more:
+            payload['start_cursor'] = results['next_cursor']
+    # 処理結果を返却
+    return result_list
 
 
 if __name__ == '__main__':

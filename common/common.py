@@ -12,6 +12,12 @@ class Common:
         return settings
 
     @classmethod
+    def custom_search(cls, notion, payload):
+        return notion.databases.query(
+            **payload
+        )
+
+    @classmethod
     def search_all_post(cls, notion, db_id):
         return notion.databases.query(
             **{
@@ -35,6 +41,30 @@ class Common:
                             'property': 'Name',
                             'title': {
                                 'equals': post_title
+                            }
+                        },
+                    ]
+                }
+            }
+        )
+
+    @classmethod
+    def search_by_checkbox(cls, notion, db_id):
+        """
+        TargetチェックボックスがOnのレコードを取得
+        :param notion: Notionインスタンス
+        :param db_id: 対象DBのID
+        :return: 対象レコード
+        """
+        return notion.databases.query(
+            **{
+                'database_id': db_id,
+                'filter': {
+                    'and': [
+                        {
+                            'property': 'Target',
+                            'checkbox': {
+                                'equals': True
                             }
                         },
                     ]
