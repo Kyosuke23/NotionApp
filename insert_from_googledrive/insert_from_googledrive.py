@@ -47,7 +47,8 @@ def main():
         title_list = get_title_list(notion=notion, db_id=ID_DB_MAIN)
 
         # DBにリンクを投稿
-        not_exits_list = []
+        exist_list = []
+        not_exist_list = []
         for file in tqdm(files):
             # リレーション設定
             relations = [{'id': UUID_DOCUMENT_GOOGLE_DRIVE}]
@@ -60,10 +61,12 @@ def main():
                     , relations=relations
                     , url=file['webViewLink']
                 )
+                exist_list.append(file['name'])
             else:
-                not_exits_list.append(file['name'])
-        if 0 < len(not_exits_list):
-            print('以下のファイルをスキップしました:\n' + str(not_exits_list))
+                not_exist_list.append(file['name'])
+        if 0 < len(not_exist_list):
+            print('以下のファイルを登録しました:\n' + str(exist_list))
+            # print('以下のファイルをスキップしました:\n' + str(not_exist_list))
 
     except HttpError as error:
         # TODO(developer) - Handle errors from drive API.
